@@ -11,8 +11,21 @@
         const buttonStart = document.getElementById('start-button');
         buttonStart.onclick = () => {
             ctx.clearRect(0, 0, 900, 500);
-        };     // não estou conseguindo limpar o canvas. quero: quando clicar em startgame, limpa o canvas e aparece só a imagem de fundo com o gatinho
+
+        let backImg = new Image();
+        backImg.src = './images/background01.jpg'
+        backImg.onload = () => {
+            ctx.drawImage(backImg, 0, 0);
+
+        let cat = new Image();
+        cat.src = './images/gato.png'
+        cat.onload = () => {
+            ctx.drawImage(cat, 300, 252, 100, 100)
+        }
+        } 
+        };     
     }
+    gameStart();
    
     
 
