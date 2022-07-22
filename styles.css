@@ -2,3 +2,9 @@ canvas {
     border: 1px solid red
     
 }
+
+
+  #game-board {
+    float: left;
+    padding: 20px 0px;
+  }
