@@ -1,60 +1,76 @@
-    const canvas = document.getElementById('canvas'); 
-    const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-    let backgroundImg = new Image()
-    backgroundImg.src = './images/backgroundintro.jpg';
-    backgroundImg.onload = () => {
-        ctx.drawImage(backgroundImg, 0, 0)
-    }; 
+let backgroundImg = new Image();
+backgroundImg.src = "./images/backgroundintro.jpg";
+backgroundImg.onload = () => {
+  ctx.drawImage(backgroundImg, 0, 0, 900, 500);
+};
 
-    function gameStart() {
-        const buttonStart = document.getElementById('start-button');
-        buttonStart.onclick = () => {
-            ctx.clearRect(0, 0, 900, 500);
+function clearCanvas() {
+  ctx.clearRect(0, 0, 900, 500);
+}
 
-        let backImg = new Image();
-        backImg.src = './images/background01.jpg'
-        backImg.onload = () => {
-            ctx.drawImage(backImg, 0, 0);
+function drawGameBackground() {
+  let backImg = new Image();
+  backImg.src = "./images/background01.jpg";
+  ctx.drawImage(backImg, 0, 0, 900, 500);
+}
 
-        let cat = new Image();
-        cat.src = './images/gato.png'
-        cat.onload = () => {
-            ctx.drawImage(cat, 300, 252, 100, 100)
-        }
-        } 
-        };     
-    }
-    gameStart();
-   
-    
+document.addEventListener("keydown", (event) => {
+  if (event.code === "Space") {
+    updateCanvas();
+  }
+  if (event.code === "ArrowRight") {
+    cat.moveRight();
+  }
+  if (event.code === "ArrowLeft") {
+    cat.moveLeft();
+  }
+});
 
+class Cat {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.speed = 15;
 
+    const catImg = new Image();
+    catImg.src = "./images/gato.png";
+    catImg.onload = () => {
+      this.catImg = catImg;
+    };
+  }
+  draw() {
+    ctx.drawImage(this.catImg, this.x, this.y, 100, 100);
+  }
 
-    
-    
+  moveLeft() {
+    this.x -= this.speed;
+  }
 
+  moveRight() {
+    this.x += this.speed;
+  }
+}
+const cat = new Cat(300, 300);
 
+function updateCanvas() {
+  clearCanvas();
+  drawGameBackground();
+  cat.draw();
 
+  requestAnimationFrame(updateCanvas);
+}
 
+class Foods {
+  // imagens foods
+  // foods de cima para baixo
+  // math.random
+}
 
-
-
-
-
-// javascripts/intro.js
-
-
-//window.onload = function() {
-    //const canvas = document.getElementById('canvas');
-    //const ctx = canvas.getContext('2d');
-    //const img = document.getElementsByClassName('back-img')
-    
-    //const backgroundImg = new Image();
-    //backgroundImg.src = './images/background01.jpg'; 
-    
-    //ctx.drawImage(img, 300, 500);
-
-
-
-
+class Obstacles {
+  // imagens obstacles
+  // de cima para baixo
+  // math.random
+}
