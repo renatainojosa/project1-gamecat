@@ -9,13 +9,13 @@ backgroundImg.onload = () => {
 
 function clearCanvas() {
   ctx.clearRect(0, 0, 900, 500);
-};
+}
 
 function drawGameBackground() {
   let backImg = new Image();
   backImg.src = "./images/background01.jpg";
   ctx.drawImage(backImg, 0, 0, 900, 500);
-};
+}
 
 document.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
@@ -28,6 +28,16 @@ document.addEventListener("keydown", (event) => {
     cat.moveLeft();
   }
 });
+
+const obstacles = [];
+const foods = [];
+
+function createObstacles() {
+    let obsX = 100 + Math.floor(Math.random() * (900 - 100));
+    const waterObs = new Obstacles(obsX, 0, 50, 50);
+    waterObs.draw();  
+    obstacles.push(waterObs);
+}; 
 
 class Cat {
   constructor(x, y) {
@@ -42,7 +52,7 @@ class Cat {
     };
   }
   draw() {
-    ctx.drawImage(this.catImg, this.x, this.y, 100, 100);
+    ctx.drawImage(this.catImg, this.x, this.y, 130, 130);
   }
 
   moveLeft() {
@@ -53,20 +63,15 @@ class Cat {
     this.x += this.speed;
   }
 }
-const cat = new Cat(300, 300);
-
-function updateCanvas() {
-  clearCanvas();
-  drawGameBackground();
-  cat.draw();
-
-  requestAnimationFrame(updateCanvas);
-}
+const cat = new Cat(300, 276);
 
 class Foods {
-  constructor(x, y) {
+  constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
+    this.width = width;
+    this.height = height;
+    this.speedY = 0;
 
     const pizza = new Image();
     pizza.src = "./images/pizza.png";
@@ -99,23 +104,61 @@ class Foods {
       this.ribs = ribs;
     };
   }
-  draw() {
+  drawPizza() {
     ctx.drawImage(this.pizza, this.x, this.y, 50, 50);
+  }
+  drawBurguer() {
     ctx.drawImage(this.burguer, this.x, this.y, 50, 50);
-    ctx.drawImage(this.iceCream, this.x, this.y, 50, 50);
-    ctx.drawImage(this.orange, this.x, this.y, 50, 50);
+  }
+  drawFrenchFries() {
     ctx.drawImage(this.frenchFries, this.x, this.y, 50, 50);
+  }
+  drawIceCream() {
+    ctx.drawImage(this.iceCream, this.x, this.y, 50, 50);
+  }
+  drawOrange() {
+    ctx.drawImage(this.orange, this.x, this.y, 50, 50);
+  }
+  drawRibs() {
     ctx.drawImage(this.ribs, this.x, this.y, 50, 50);
   }
-  moveDown() {}
+
+  newPos() {
+    this.y += this.speedY;
+  }
+
+  //moveDown() {}
 
   // imagens foods
   // foods de cima para baixo
   // math.random
 }
+const pizza = new Foods(100, 0, 50, 50);
+const burguer = new Foods(150, 0, 50, 50);
 
 class Obstacles {
-  // imagens obstacles
-  // de cima para baixo
-  // math.random
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+
+    const water = new Image();
+    water.src = "./images/water.png";
+    water.onload = () => {
+      this.water = water;
+    };
+  }
+
+  draw() {
+    ctx.drawImage(this.water, this.x, 0, 50, 50);
+  }
+}; 
+
+
+function updateCanvas() {
+  clearCanvas();
+  drawGameBackground();
+  cat.draw();
+  createObstacles();
+
+  requestAnimationFrame(updateCanvas);
 }
