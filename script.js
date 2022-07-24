@@ -32,13 +32,6 @@ document.addEventListener("keydown", (event) => {
 const obstacles = [];
 const foods = [];
 
-function createObstacles() {
-    let obsX = 100 + Math.floor(Math.random() * (900 - 100));
-    const waterObs = new Obstacles(obsX, 0, 50, 50);
-    waterObs.draw();  
-    obstacles.push(waterObs);
-}; 
-
 class Cat {
   constructor(x, y) {
     this.x = x;
@@ -136,6 +129,7 @@ class Foods {
 const pizza = new Foods(100, 0, 50, 50);
 const burguer = new Foods(150, 0, 50, 50);
 
+
 class Obstacles {
   constructor(x, y) {
     this.x = x;
@@ -143,22 +137,31 @@ class Obstacles {
 
     const water = new Image();
     water.src = "./images/water.png";
-    water.onload = () => {
-      this.water = water;
-    };
+    this.water = water;
   }
 
   draw() {
-    ctx.drawImage(this.water, this.x, 0, 50, 50);
+    ctx.drawImage(this.water, this.x, this.y, 100, 100);
   }
-}; 
 
+  moveDown() {
+    this.y += this.speed;
+  }
+}
+
+function createObstacles() {
+  let obsX = 20 + Math.floor(Math.random() * (900 - 20));
+  let obsY = Math.floor(Math.random() * 300);
+  let waterObs = new Obstacles(obsX, obsY);
+  waterObs.draw();
+  obstacles.push(waterObs);
+}
 
 function updateCanvas() {
   clearCanvas();
   drawGameBackground();
   cat.draw();
-  createObstacles();
+  createObstacles(); 
 
   requestAnimationFrame(updateCanvas);
 }
