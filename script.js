@@ -68,53 +68,37 @@ class Foods {
 
     const pizza = new Image();
     pizza.src = "./images/pizza.png";
-    pizza.onload = () => {
       this.pizza = pizza;
-    };
+    
     const burguer = new Image();
     burguer.src = "./images/burger.png";
-    burguer.onload = () => {
       this.burguer = burguer;
-    };
+    
     const iceCream = new Image();
     iceCream.src = "./images/ice.png";
-    iceCream.onload = () => {
       this.iceCream = iceCream;
-    };
+   
     const orange = new Image();
     orange.src = "./images/orange.png";
-    orange.onload = () => {
       this.orange = orange;
-    };
+    
     const frenchFries = new Image();
     frenchFries.src = "./images/french-fries.png";
-    frenchFries.onload = () => {
       this.frenchFries = frenchFries;
-    };
+    
     const ribs = new Image();
     ribs.src = "./images/spare-ribs.png";
-    ribs.onload = () => {
       this.ribs = ribs;
-    };
   }
-  drawPizza() {
+  draw() {
     ctx.drawImage(this.pizza, this.x, this.y, 50, 50);
+    ctx.drawImage(this.burguer, (this.x + 130), this.y, 50, 50);
+    ctx.drawImage(this.frenchFries, (this.x + 230), this.y, 50, 50);
+    ctx.drawImage(this.iceCream, (this.x + 330), this.y, 30, 50);
+    ctx.drawImage(this.orange, (this.x + 430), this.y, 50, 50);
+    ctx.drawImage(this.ribs, (this.x + 530), this.y, 50, 50);
   }
-  drawBurguer() {
-    ctx.drawImage(this.burguer, this.x, this.y, 50, 50);
-  }
-  drawFrenchFries() {
-    ctx.drawImage(this.frenchFries, this.x, this.y, 50, 50);
-  }
-  drawIceCream() {
-    ctx.drawImage(this.iceCream, this.x, this.y, 50, 50);
-  }
-  drawOrange() {
-    ctx.drawImage(this.orange, this.x, this.y, 50, 50);
-  }
-  drawRibs() {
-    ctx.drawImage(this.ribs, this.x, this.y, 50, 50);
-  }
+  
 
   newPos() {
     this.y += this.speedY;
@@ -126,8 +110,7 @@ class Foods {
   // foods de cima para baixo
   // math.random
 }
-const pizza = new Foods(100, 0, 50, 50);
-const burguer = new Foods(150, 0, 50, 50);
+
 
 
 class Obstacles {
@@ -157,10 +140,19 @@ function createObstacles() {
   obstacles.push(waterObs);
 }
 
+function createFoods() {
+    let foodsX = 130 + Math.floor(Math.random() * (900 - 130));
+    let foodsY = Math.floor(Math.random() * 300); 
+    let food = new Foods(foodsX, foodsY);
+    food.draw();
+    foods.push(food); 
+}
+
 function updateCanvas() {
   clearCanvas();
   drawGameBackground();
   cat.draw();
+  createFoods();
   createObstacles(); 
 
   requestAnimationFrame(updateCanvas);
