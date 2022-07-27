@@ -124,6 +124,9 @@ function updateFoods() {
     if (foods[i].y > 356) {
       foods.splice(i, 1);
     };
+   //if (foods[i].y == cat.y) {
+   //foods.splice(i, 1); 
+   // }
   };
 };
 
@@ -167,10 +170,20 @@ function updateObstacles() {
   }
 }
 
+// Score
+function score() {
+    let points = 0; 
+    ctx.font = '30px "VT323"';
+    ctx.textAlign = 'right'; 
+    ctx.fillStyle = 'black';
+    ctx.fillText(`Score: ${points}`, canvas.width - 50, canvas.height - 455)
+}
+
 function updateCanvas() {
   clearCanvas();
   drawGameBackground();
   cat.draw();
+  score();
   updateObstacles();
   updateFoods();
 
