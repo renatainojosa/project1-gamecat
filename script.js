@@ -7,33 +7,34 @@ backgroundImg.onload = () => {
   ctx.drawImage(backgroundImg, 0, 0, 900, 500);
 };
 
-let frames = 0; // contar a quantidade de quadros
+let frames = 0;
 
 function clearCanvas() {
   ctx.clearRect(0, 0, 900, 500);
-}
+};
 
 function drawGameBackground() {
   let backImg = new Image();
   backImg.src = "./images/background01.jpg";
   ctx.drawImage(backImg, 0, 0, 900, 500);
-}
+};
 
 document.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
     updateCanvas();
-  }
+  };
   if (event.code === "ArrowRight") {
     cat.moveRight();
-  }
+  };
   if (event.code === "ArrowLeft") {
     cat.moveLeft();
-  }
+  };
 });
 
 const obstacles = [];
 const foods = [];
 
+// CAT:
 class Cat {
   constructor(x, y) {
     this.x = x;
@@ -64,6 +65,7 @@ class Cat {
 }
 const cat = new Cat(300, 276);
 
+// FOODS:
 class Foods {
   constructor(x, y, width, height) {
     this.x = x;
@@ -95,8 +97,8 @@ class Foods {
     let randomIndex = Math.floor(Math.random() * foodsArr.length);
     for (let i = 0; i < foodsArr.length; i++) {
       this.img = foodsArr[randomIndex];
-    };
-  };
+    }
+  }
 
   draw() {
     ctx.drawImage(this.img, this.x, this.y, 50, 50);
@@ -117,19 +119,20 @@ function createFoods() {
 function updateFoods() {
   if (frames % 60 === 0) {
     createFoods();
-  };
+  }
   for (let i = 0; i < foods.length; i++) {
     foods[i].newPos();
     foods[i].draw();
     if (foods[i].y > 356) {
       foods.splice(i, 1);
-    };
-   //if (foods[i].y == cat.y) {
-   //foods.splice(i, 1); 
-   // }
-  };
+    }
+   // if (foods[i].y == cat.y) {
+   // foods.splice(i, 1);
+    //}
+  }
 };
 
+// OBSTACLES:
 class Obstacles {
   constructor(x, y) {
     this.x = x;
@@ -170,20 +173,27 @@ function updateObstacles() {
   }
 }
 
-// Score
-function score() {
-    let points = 0; 
-    ctx.font = '30px "VT323"';
-    ctx.textAlign = 'right'; 
-    ctx.fillStyle = 'black';
-    ctx.fillText(`Score: ${points}`, canvas.width - 50, canvas.height - 455)
+// SCORE:
+let score = 0;
+
+function createScore() {
+  ctx.font = '30px "VT323"';
+  ctx.textAlign = "right";
+  ctx.fillStyle = "white";
+  ctx.fillText(`Score: ${score}`, canvas.width - 50, canvas.height - 455);
+};
+
+function updateScore() {
+   // teste:  score += 1; 
 }
+
 
 function updateCanvas() {
   clearCanvas();
   drawGameBackground();
   cat.draw();
-  score();
+  createScore();
+  updateScore();
   updateObstacles();
   updateFoods();
 
