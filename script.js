@@ -9,6 +9,7 @@ backgroundImg.onload = () => {
 
 const gameMusic = new Audio("/musics/SuperMarioWorld-music.mp3");
 const gameOverSound = new Audio("/musics/GameOver-music.mp3");
+const pickFoodSound = new Audio("/musics/sommariomoedas_j6mHiNpM.mp3");
 
 let frames = 0;
 
@@ -28,16 +29,22 @@ let stopGame = true;
 function showGameOverArea() {
   clearCanvas();
   let gameOverImg = new Image();
-  gameOverImg.src = "./images/tela game over.jpg";
-  gameOverImg.onload = () => ctx.drawImage(gameOverImg, 0, 0, canvas.width, canvas.height);
+  gameOverImg.src = "./images/GAMEOVER.jpg";
+  gameOverImg.onload = () =>
+    ctx.drawImage(gameOverImg, 0, 0, canvas.width, canvas.height);
 
   gameMusic.pause();
   gameOverSound.play();
 }
+function resetGame() {
+  frames = 0; 
+  cat.draw();
+  
+}
 
 document.addEventListener("keydown", (event) => {
   if (event.code === "Space" && stopGame) {
-    stopGame = false; 
+    stopGame = false;
     updateCanvas();
   }
   if (event.code === "ArrowRight") {
@@ -45,6 +52,9 @@ document.addEventListener("keydown", (event) => {
   }
   if (event.code === "ArrowLeft") {
     cat.moveLeft();
+  }
+  if (event.code === "Enter") {
+    location.reload();
   }
 });
 
@@ -99,6 +109,14 @@ class Cat {
       this.top() > obstacle.y + obstacle.height ||
       this.right() < obstacle.x ||
       this.left() > obstacle.x + obstacle.width
+    );
+  }
+  crashFoods(food) {
+    return !(
+      this.bottom() < food.y ||
+      this.top() > food.y + food.height ||
+      this.right() < food.x ||
+      this.left() > food.x + food.width
     );
   }
 }
@@ -176,7 +194,7 @@ class Obstacles {
     this.y = y;
     this.width = 40;
     this.height = 40;
-    this.speed = 5;
+    this.speed = 4;
 
     const water = new Image();
     water.src = "./images/water.png";
@@ -232,15 +250,20 @@ function createScore() {
   ctx.fillText(`Score: ${points}`, canvas.width - 50, canvas.height - 455);
 }
 
-function updateScore() {
-  // points = Math.floor(frames / 10);
+function pickUpFood() {
+  const eat = foods.some((food) => cat.crashFoods(food));
+
+  if (eat) {
+    pickFoodSound.play();
+    points += 1;
+    console.log(points);
+  }
 }
 
 function checkGameOver() {
   const crashed = obstacles.some((obstacle) => cat.crashWith(obstacle));
 
   if (crashed) {
-    console.log(cat, obstacles);
     stopGame = true;
   }
 }
@@ -250,9 +273,9 @@ function updateCanvas() {
   drawGameBackground();
   cat.draw();
   createScore();
-  // updateScore();
   updateObstacles();
   updateFoods();
+  pickUpFood();
 
   checkGameOver();
 
