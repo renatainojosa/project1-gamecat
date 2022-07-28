@@ -7,28 +7,45 @@ backgroundImg.onload = () => {
   ctx.drawImage(backgroundImg, 0, 0, 900, 500);
 };
 
+const gameMusic = new Audio("/musics/SuperMarioWorld-music.mp3");
+const gameOverSound = new Audio("/musics/GameOver-music.mp3");
+
 let frames = 0;
 
 function clearCanvas() {
   ctx.clearRect(0, 0, 900, 500);
-};
+}
 
 function drawGameBackground() {
   let backImg = new Image();
   backImg.src = "./images/background01.jpg";
   ctx.drawImage(backImg, 0, 0, 900, 500);
-};
+  gameMusic.play();
+}
+
+let stopGame = true;
+
+function showGameOverArea() {
+  clearCanvas();
+  let gameOverImg = new Image();
+  gameOverImg.src = "./images/tela game over.jpg";
+  gameOverImg.onload = () => ctx.drawImage(gameOverImg, 0, 0, canvas.width, canvas.height);
+
+  gameMusic.pause();
+  gameOverSound.play();
+}
 
 document.addEventListener("keydown", (event) => {
-  if (event.code === "Space") {
+  if (event.code === "Space" && stopGame) {
+    stopGame = false; 
     updateCanvas();
-  };
+  }
   if (event.code === "ArrowRight") {
     cat.moveRight();
-  };
+  }
   if (event.code === "ArrowLeft") {
     cat.moveLeft();
-  };
+  }
 });
 
 const obstacles = [];
@@ -39,6 +56,8 @@ class Cat {
   constructor(x, y) {
     this.x = x;
     this.y = y;
+    this.height = 130;
+    this.width = 130;
     this.speed = 20;
 
     const catImg = new Image();
@@ -48,7 +67,7 @@ class Cat {
     };
   }
   draw() {
-    ctx.drawImage(this.catImg, this.x, this.y, 130, 130);
+    ctx.drawImage(this.catImg, this.x, this.y, this.width, this.height);
   }
 
   moveLeft() {
@@ -62,7 +81,28 @@ class Cat {
       this.x += this.speed;
     }
   }
+  left() {
+    return this.x;
+  }
+  right() {
+    return this.x + this.width;
+  }
+  top() {
+    return this.y;
+  }
+  bottom() {
+    return this.y + this.height;
+  }
+  crashWith(obstacle) {
+    return !(
+      this.bottom() < obstacle.y ||
+      this.top() > obstacle.y + obstacle.height ||
+      this.right() < obstacle.x ||
+      this.left() > obstacle.x + obstacle.width
+    );
+  }
 }
+
 const cat = new Cat(300, 276);
 
 // FOODS:
@@ -70,8 +110,8 @@ class Foods {
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
-    this.width = width;
-    this.height = height;
+    this.width = 50;
+    this.height = 50;
     this.speed = 6;
 
     const pizza = new Image();
@@ -101,7 +141,7 @@ class Foods {
   }
 
   draw() {
-    ctx.drawImage(this.img, this.x, this.y, 50, 50);
+    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
   newPos() {
@@ -126,17 +166,16 @@ function updateFoods() {
     if (foods[i].y > 356) {
       foods.splice(i, 1);
     }
-   // if (foods[i].y == cat.y) {
-   // foods.splice(i, 1);
-    //}
   }
-};
+}
 
 // OBSTACLES:
 class Obstacles {
   constructor(x, y) {
     this.x = x;
     this.y = y;
+    this.width = 40;
+    this.height = 40;
     this.speed = 5;
 
     const water = new Image();
@@ -145,7 +184,17 @@ class Obstacles {
   }
 
   draw() {
-    ctx.drawImage(this.water, this.x, this.y, 100, 100);
+    ctx.drawImage(
+      this.water,
+      83,
+      50,
+      85,
+      101,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    );
   }
 
   newPos() {
@@ -154,9 +203,9 @@ class Obstacles {
 }
 
 function createObstacles() {
-  let obsX = 20 + Math.floor(Math.random() * (900 - 20));
-  let obsY = 0;
-  let waterObs = new Obstacles(obsX, obsY);
+  let x = 20 + Math.floor(Math.random() * (900 - 20));
+  let y = 0;
+  let waterObs = new Obstacles(x, y);
   obstacles.push(waterObs);
 }
 
@@ -174,30 +223,44 @@ function updateObstacles() {
 }
 
 // SCORE:
-let score = 0;
+let points = 0;
 
 function createScore() {
   ctx.font = '30px "VT323"';
   ctx.textAlign = "right";
   ctx.fillStyle = "white";
-  ctx.fillText(`Score: ${score}`, canvas.width - 50, canvas.height - 455);
-};
-
-function updateScore() {
-   // teste:  score += 1; 
+  ctx.fillText(`Score: ${points}`, canvas.width - 50, canvas.height - 455);
 }
 
+function updateScore() {
+  // points = Math.floor(frames / 10);
+}
+
+function checkGameOver() {
+  const crashed = obstacles.some((obstacle) => cat.crashWith(obstacle));
+
+  if (crashed) {
+    console.log(cat, obstacles);
+    stopGame = true;
+  }
+}
 
 function updateCanvas() {
   clearCanvas();
   drawGameBackground();
   cat.draw();
   createScore();
-  updateScore();
+  // updateScore();
   updateObstacles();
   updateFoods();
 
-  requestAnimationFrame(updateCanvas);
+  checkGameOver();
+
+  if (!stopGame) {
+    requestAnimationFrame(updateCanvas);
+  } else {
+    showGameOverArea();
+  }
 
   frames += 1;
 }
