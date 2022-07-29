@@ -37,9 +37,8 @@ function showGameOverArea() {
   gameOverSound.play();
 }
 function resetGame() {
-  frames = 0; 
+  frames = 0;
   cat.draw();
-  
 }
 
 document.addEventListener("keydown", (event) => {
@@ -250,13 +249,21 @@ function createScore() {
   ctx.fillText(`Score: ${points}`, canvas.width - 50, canvas.height - 455);
 }
 
+function clearFood() {
+  for (let i = 0; i < foods.length; i++) {
+    if (foods[i].y > (356 - cat.height)) {
+     foods.splice(i, 1);
+    }
+  }
+}
+
 function pickUpFood() {
   const eat = foods.some((food) => cat.crashFoods(food));
 
   if (eat) {
     pickFoodSound.play();
-    points += 1;
-    console.log(points);
+    clearFood();
+    points += 30;
   }
 }
 
