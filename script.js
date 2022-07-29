@@ -7,9 +7,9 @@ backgroundImg.onload = () => {
   ctx.drawImage(backgroundImg, 0, 0, 900, 500);
 };
 
-const gameMusic = new Audio("/musics/SuperMarioWorld-music.mp3");
-const gameOverSound = new Audio("/musics/GameOver-music.mp3");
-const pickFoodSound = new Audio("/musics/sommariomoedas_j6mHiNpM.mp3");
+const gameMusic = new Audio("./musics/SuperMarioWorld-music.mp3");
+const gameOverSound = new Audio("./musics/GameOver-music.mp3");
+const pickFoodSound = new Audio("./musics/sommariomoedas_j6mHiNpM.mp3");
 
 let frames = 0;
 
