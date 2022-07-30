@@ -9,11 +9,12 @@ Project #1 - Web Development - IRONHACK
 
 ## Controls
 
-Arrow keys:
+Arrow keys to movement the cat:
 
-Left and right
+Left :arrow_left:
+and 
+Right :arrow_right:
 
-<img src="./images/arrows.png"/>
 
 ## The game
 
