@@ -19,4 +19,4 @@ Left and right
 
 To play the game, click on the link: https://renatainojosa.github.io/project1-gamecat/ 
 
-<img src="./images/backgroundintro.jpg>
+<img src="./images/backgroundintro.jpg">
