@@ -21,8 +21,3 @@ Right :arrow_right:
 To play the game, click on the link: https://renatainojosa.github.io/project1-gamecat/ 
 
 <img src="./images/backgroundintro.jpg">
-
-
-
-
-
